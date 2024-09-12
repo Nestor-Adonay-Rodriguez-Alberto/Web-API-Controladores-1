@@ -15,36 +15,86 @@ namespace Web_API_Controladores_1.Controllers
 
 
         // GET: api/<PersonaController>
-        // Obtiene Todos Los Registros De La Lista:
+        // OBTIENE TODOS LOS REGISTROS DE LA LISTA:
         [HttpGet]
         public IEnumerable<Persona> Get()
         {
             return Lista_Personas;
         }
 
+
+
         // GET api/<PersonaController>/5
+        // OBTIENE UN REGISTRO CON ESE MISMO ID: 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Persona Get(int id)
         {
-            return "value";
+            Persona Objetod_Obtenido = Lista_Personas.FirstOrDefault(x => x.IdPersona == id);
+
+            return Objetod_Obtenido;
         }
+
+
 
         // POST api/<PersonaController>
+        // GUARDA EL OBJETO DEL PARAMETRO EN LA LISTA:
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Persona persona)
         {
+            Lista_Personas.Add(persona);
+
+            return Ok("Guardado Exitosamente.");
         }
+
+
 
         // PUT api/<PersonaController>/5
+        // OBTIENE UN REGISTRO CON ESE MISMO ID Y LO MODIFICA CON LOS DATOS DEL PARAMETRO:
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Persona persona)
         {
+
+            Persona? Objetod_Obtenido = Lista_Personas.FirstOrDefault(x => x.IdPersona == id);
+
+            if(Objetod_Obtenido!=null)
+            {
+                Objetod_Obtenido.Nombre = persona.Nombre;
+                Objetod_Obtenido.Edad = persona.Edad;
+                Objetod_Obtenido.Residencia = persona.Residencia;
+                Objetod_Obtenido.Telefono = persona.Telefono;
+
+                return Ok("Modificado Exitosamente.");
+            }
+            else
+            {
+                return NotFound("No se encontro un registro con ese ID:");
+            }
+
         }
 
+
+
         // DELETE api/<PersonaController>/5
+        // OBTIENE UN REGISTRO CON ESE MISMO ID Y LO ELIMINA:
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+
+            Persona? Objetod_Obtenido = Lista_Personas.FirstOrDefault(x => x.IdPersona == id);
+
+            if (Objetod_Obtenido != null)
+            {
+                Lista_Personas.Remove(Objetod_Obtenido);
+
+                return Ok("Eliminado Exitosamente.");
+            }
+            else
+            {
+                return NotFound("No se encontro un registro con ese ID:");
+            }
+
         }
+
+
     }
 }
